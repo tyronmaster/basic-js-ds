@@ -9,18 +9,20 @@ const { Node } = require('../extensions/list-tree.js');
 class BinarySearchTree {
 
   root() {
-    return this.root || null;
+    if (!this.rootNode) {
+      this.rootNode = null;
+    }
+    return this.rootNode;
   }
 
   add(data) {
-    
+    if (!data) return null;
     const newNode = new Node(data);
-    if (!this.root) {
-      this.root = newNode;
+    if (!this.rootNode) {
+      this.rootNode = newNode;
       return;
     }
-
-    let currentNode = this.root;
+    let currentNode = this.rootNode;
     while (currentNode) {
       if (newNode.data < currentNode.left) {
         if (!currentNode.left) {
@@ -36,11 +38,13 @@ class BinarySearchTree {
         currentNode = currentNode.right;
       }
     }
-
   }
 
   has(data) {
-    let currentNode = this.root;
+    let currentNode = this.rootNode;
+    if (currentNode == null || data == null) {
+      return null;
+    }
     while (currentNode) {
       if (data < currentNode.data) {
         currentNode = currentNode.left;
@@ -53,9 +57,21 @@ class BinarySearchTree {
     return false;
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+     currentNode = this.rootNode;
+    if (currentNode == null || data == null) {
+      return null;
+    }
+    while (currentNode) {
+      if (data < currentNode.left) {
+        currentNode = currentNode.left;
+      } else if (data > currentNode.right) {
+        currentNode = currentNode.right;
+      } else {
+        return currentNode;
+      }
+    }
+    return null;
   }
 
   remove(/* data */) {
@@ -64,19 +80,23 @@ class BinarySearchTree {
   }
 
   min() {
-    let currentNode = this.root;
+    let currentNode = this.rootNode;
     while (currentNode) {
-      currentNode = this.left;
+      if (!currentNode.left) {
+        return currentNode.data;
+      }
+      currentNode = currentNode.left;
     }
-    return currentNode;
   }
 
   max() {
-    let currentNode = this.root;
+    let currentNode = this.rootNode;
     while (currentNode) {
-      currentNode = this.right;
+      if (!currentNode.right) {
+        return currentNode.data;
+      }
+      currentNode = currentNode.right;
     }
-    return currentNode;
   }
 }
 
