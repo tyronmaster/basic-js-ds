@@ -16,6 +16,7 @@ class BinarySearchTree {
   }
 
   add(data) {
+
     if (!data) return null;
     const newNode = new Node(data);
     if (!this.rootNode) {
@@ -24,27 +25,33 @@ class BinarySearchTree {
     }
     let currentNode = this.rootNode;
     while (currentNode) {
-      if (newNode.data < currentNode.left) {
+      if (data < currentNode.data) {
         if (!currentNode.left) {
           currentNode.left = newNode;
           return;
+        } else {
+          currentNode = currentNode.left;
         }
-        currentNode = currentNode.left;
       } else {
         if (!currentNode.right) {
           currentNode.right = newNode;
           return;
+        } else {
+          currentNode = currentNode.right;
         }
-        currentNode = currentNode.right;
       }
     }
+
   }
 
   has(data) {
-    let currentNode = this.rootNode;
-    if (currentNode == null || data == null) {
+
+    if (!data) return null;
+    if (!this.rootNode) {
       return null;
     }
+
+    let currentNode = this.rootNode;
     while (currentNode) {
       if (data < currentNode.data) {
         currentNode = currentNode.left;
@@ -55,29 +62,70 @@ class BinarySearchTree {
       }
     }
     return false;
+
   }
 
   find(data) {
-     currentNode = this.rootNode;
-    if (currentNode == null || data == null) {
+
+    if (!data) return null;
+    if (!this.rootNode) {
       return null;
     }
+    let currentNode = this.rootNode;
+
     while (currentNode) {
-      if (data < currentNode.left) {
-        currentNode = currentNode.left;
-      } else if (data > currentNode.right) {
-        currentNode = currentNode.right;
-      } else {
+      if (data === currentNode.data) {
         return currentNode;
+      }
+      if (data < currentNode.data) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
       }
     }
     return null;
+
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  remove(data) {
+
+    if (this.root === null) return;
+
+    let elementToDelete = this.find(data);
+    if (!elementToDelete) {
+      return;
+    }
+
+    if (elementToDelete.left === null && elementToDelete.right === null) {
+      elementToDelete.data = null;
+      return;
+    }
+
+    if (elementToDelete.left === null) {
+      elementToDelete = elementToDelete.right;
+      return;
+    }
+    if (elementToDelete.right === null) {
+      elementToDelete = elementToDelete.left;
+      return;
+    }
+
+    if (elementToDelete.right && elementToDelete.left) {
+      let child = elementToDelete.right;
+      while (child) {
+        if (child.left) {
+          child = child.left;
+        } else {
+          elementToDelete.data = child.data;
+          child = null;
+          return;
+        }
+      }
+
+
+    }
   }
+
 
   min() {
     let currentNode = this.rootNode;
