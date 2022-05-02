@@ -89,15 +89,54 @@ class BinarySearchTree {
 
   remove(data) {
 
+    /* RECURSIAN realization */
+    this.rootNode = removeNode(this.rootNode, data);
+
+    function removeNode(node, data) {
+      if (!node) return;
+
+      if (data < node.left) {
+        node.left = removeNode(node.left, data);
+        return node;
+      } else if (data > node.right) {
+        node.right = removeNode(node.right, data);
+        return node;
+      } else {
+        if (!node.left && !node.right) {
+          return;
+        }
+        if (!node.left) {
+          node = node.right;
+          return node;
+        }
+        if (!node.right) {
+          node = node.left;
+          return node;
+        }
+
+        let minRight = node.right;
+        while (minRight.left) {
+          minRight = minRight.left;
+        }
+        node.data = minRight.data;
+
+        node.right = removeNode(node.right, minRight.data);
+
+        return node;
+      }
+    }
+
+
+
+    /* NONE RECURSION realization */
+    /*
     if (this.root === null) return;
 
     let elementToDelete = this.find(data);
-    if (!elementToDelete) {
-      return;
-    }
+    if (!elementToDelete) return;
 
     if (elementToDelete.left === null && elementToDelete.right === null) {
-      elementToDelete.data = null;
+      elementToDelete = null;
       return;
     }
 
@@ -117,13 +156,16 @@ class BinarySearchTree {
           child = child.left;
         } else {
           elementToDelete.data = child.data;
-          child = null;
-          return;
+          if (child.right) {
+            child = child.right;
+          } else {
+            child = null;
+          }
         }
       }
-
-
+      return;
     }
+    */
   }
 
 
