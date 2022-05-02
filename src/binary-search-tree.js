@@ -88,8 +88,44 @@ class BinarySearchTree {
   }
 
   remove(data) {
+    const removeNode = function(node, data) {
+      if (node == null) {
+          return null;
+      }
+      if (data == node.data) {
+          // У узла нет детей
+          if (node.left === null && node.right === null) {
+              return null;
+          }
+          // У узла только правый ребенок
+          if (node.left === null) {
+              return node.right;
+          }
+          // У узла только левый ребенок
+          if (node.right === null) {
+              return node.left;
+          }
+          // У узла двое детей
+          var current = node.right;
+          while (current.left !== null) {
+              current = current.left;
+          }
+          node.data = current.data;
+          node.right = removeNode(node.right, current.data);
+          return node;
+      } else if (data < node.data) {
+          node.left = removeNode(node.left, data);
+          return node;
+      } else {
+          node.right = removeNode(node.right, data);
+          return node;
+      }
+  };
+  this.rootNode = removeNode(this.rootNode, data);
+
 
     /* RECURSIAN realization */
+    /*
     this.rootNode = removeNode(this.rootNode, data);
 
     function removeNode(node, data) {
